@@ -94,7 +94,7 @@ class Boss(Enemy):
     Boss_count = 0
 
     def __init__(self, screen, colour, radius, speed):
-        super(Boss).__init__(screen, colour, radius, speed)
+        super(Boss, self).__init__(screen, colour, radius, speed)
         self.hp = Boss.Boss_count + 1
         Boss.Boss_count += 1
 

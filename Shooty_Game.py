@@ -81,9 +81,8 @@ if __name__ == '__main__':
 
         for ii in range(len(enemy_list)):
             if enemy_list[ii] == [] and random.random() < 0.01:
-                new_enemy = Ent.Enemy(screen, e_colour, e_size, p_point, e_speed, SCREEN_WIDTH, SCREEN_HIEGHT,
-                                      enemy_count_max)
-                enemy_list[new_enemy.count] = new_enemy
+                new_enemy = Ent.Enemy(screen, ii)
+                enemy_list[ii] = new_enemy
 
             for jj in range(len(bullet_list)):
                 if enemy_list[ii] != [] and bullet_list[jj] != []:
@@ -131,10 +130,10 @@ if __name__ == '__main__':
             boss_list.update_projectiles()
 
         if boss and boss_list == []:
-            print('boss')
-            print(Ent.Boss.Boss_count)
-            boss_list = Ent.Boss(screen, boss_colour, boss_size + Ent.Boss.Boss_count * 2, p_point,
-                                 boss_speed + Ent.Boss.Boss_count, SCREEN_WIDTH, SCREEN_HIEGHT, enemy_count_max)
+            print(f"Boss count is {Ent.Boss.Boss_count}")
+            boss_list = Ent.Boss(screen, boss_colour,
+                                 boss_size + Ent.Boss.Boss_count * 2,
+                                 boss_speed + Ent.Boss.Boss_count)
             enemy_count_max += 1
             enemy_list.append([])
 
