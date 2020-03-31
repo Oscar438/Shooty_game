@@ -1,8 +1,9 @@
 import pygame
 import Game_Functions as Game
-import Entity as Ent
+import entities as Ent
 import sys
 import random
+import constants
 
 pygame.init()
 SCREEN_HIEGHT = 750
@@ -11,50 +12,44 @@ TICK = 30
 
 clock = pygame.time.Clock()
 
-p_colour = (0, 150, 150)
-b_colour = (200, 100, 0)
-e_colour = (255, 0, 50)
-boss_colour = (255, 0, 0)
-gun_colour = (255, 255, 150)
-t_colour = (255, 255, 255)
+p_colour = constants.Colours.p_colour
+b_colour = constants.Colours.b_colour
+e_colour = constants.Colours.enemy_colour
+boss_colour = constants.Colours.boss_colour
+gun_colour = constants.Colours.gun_colour
+t_colour = constants.Colours.t_colour
+
 p_point = (SCREEN_WIDTH // 2, SCREEN_HIEGHT // 2)
-p_size = 20
+p_size = constants.Sizes.player_size
 p_reload = 0
 b_rate = 10
-b_size = 5
-b_speed = 3
-e_size = 10
-e_speed = 3
-boss_size = 15
-boss_speed = 2
+b_size = constants.Sizes.bullet_size
+b_speed = constants.Speeds.bullet_speed
+e_size = constants.Sizes.enemy_size
+e_speed = constants.Speeds.enemy_speed
+boss_size = constants.Sizes.boss_size
+boss_speed = constants.Speeds.boss_speed
 bullet_count_max = 25
 enemy_count_max = 10
 boss_list = []
 boss = False
 score = 0
 
-# for ii in range(bullet_count_max):
-# 	bullet_list.append([])
-
-
-# for ii in range(enemy_count_max):
-# 	enemy_list.append([])
-
-# I prefer list comprehensions whenever possible
-bullet_list = [list() for i in range(bullet_count_max)]
-enemy_list = [list() for i in range(enemy_count_max)]
-
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HIEGHT])
 
 the_font = pygame.font.SysFont("momospace", 35)
 
-player = Ent.player(screen, p_colour, gun_colour, p_point, p_size)
+player = Ent.Player(screen, p_colour, gun_colour, p_point, p_size)
 
 Game_Over = False
 
 # The standard way of writing a main() function in python is doing this weird thing.
 # It's what separates 'code' from 'scripts'
 if __name__ == '__main__':
+    # I prefer list comprehensions whenever possible
+    bullet_list = [list() for i in range(bullet_count_max)]
+    enemy_list = [list() for i in range(enemy_count_max)]
+
     while not Game_Over:
         events = pygame.event.get()
         if any([event.type for event in events if event.type == pygame.QUIT]):
@@ -72,11 +67,9 @@ if __name__ == '__main__':
         mouse_position = pygame.mouse.get_pos()
         gun_point = player.draw_player(mouse_position)
 
-
-
         if pygame.key.get_pressed()[32] == 1:
             if p_reload == 0:
-                new_bullet = Ent.projectile(screen, b_colour, gun_point, b_size, p_point, pygame.mouse.get_pos(),
+                new_bullet = Ent.Projectile(screen, b_colour, gun_point, b_size, p_point, pygame.mouse.get_pos(),
                                             b_speed, bullet_count_max)
                 bullet_list[new_bullet.count] = new_bullet
                 p_reload = b_rate
@@ -88,7 +81,7 @@ if __name__ == '__main__':
 
         for ii in range(len(enemy_list)):
             if enemy_list[ii] == [] and random.random() < 0.01:
-                new_enemy = Ent.enemy(screen, e_colour, e_size, p_point, e_speed, SCREEN_WIDTH, SCREEN_HIEGHT,
+                new_enemy = Ent.Enemy(screen, e_colour, e_size, p_point, e_speed, SCREEN_WIDTH, SCREEN_HIEGHT,
                                       enemy_count_max)
                 enemy_list[new_enemy.count] = new_enemy
 
@@ -139,9 +132,9 @@ if __name__ == '__main__':
 
         if boss and boss_list == []:
             print('boss')
-            print(Ent.boss.Boss_count)
-            boss_list = Ent.boss(screen, boss_colour, boss_size + Ent.boss.Boss_count * 2, p_point,
-                                 boss_speed + Ent.boss.Boss_count, SCREEN_WIDTH, SCREEN_HIEGHT, enemy_count_max)
+            print(Ent.Boss.Boss_count)
+            boss_list = Ent.Boss(screen, boss_colour, boss_size + Ent.Boss.Boss_count * 2, p_point,
+                                 boss_speed + Ent.Boss.Boss_count, SCREEN_WIDTH, SCREEN_HIEGHT, enemy_count_max)
             enemy_count_max += 1
             enemy_list.append([])
 
